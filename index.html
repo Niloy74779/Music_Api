@@ -54,7 +54,7 @@
 
             </div>
             <!-- === Simple results === -->
-            <div class="d-flex justify-content-center" class="default-item">
+            <div class="d-flex justify-content-center">
                 <div class="">
                     <p class="author lead"><strong>Purple Noon</strong> Album by <span>Washed Out</span> <button class="btn btn-success">Get Lyrics</button></p>
                     <p class="author lead"><strong>Purple Noon</strong> Album by <span>Washed Out</span> <button class="btn btn-success">Get Lyrics</button></p>
@@ -64,7 +64,7 @@
                 </div>
             </div>
             <!-- Single Lyrics -->
-            <div class="single-lyrics text-center" class="default-item" >
+            <div class="single-lyrics text-center">
                 <button class="btn go-back">&lsaquo;</button>
                 <h2 class="text-success mb-4">Pentatonix - Na Na Na</h2>
                 <pre class="lyric text-white">
@@ -164,7 +164,7 @@
                 </pre>
             </div>
             <!-- === Fancy results === -->
-            <div class="search-result col-md-8 mx-auto py-4" >
+            <div class="search-result col-md-8 mx-auto py-4">
                 <!-- single result -->
                 <div class="single-result row align-items-center my-3 p-3">
                     <div class="col-md-9">
@@ -268,6 +268,36 @@
             }else{
                 searchSongs(searchTerm);
             }
+        });
+        //Get lyrics for song
+        function getLyrics(artist, songTitle){
+            fetch(`https://api.lyrics.ovh/v1/${artist}/${songTitle}`)
+            .then(response => response.json())
+            .then(data =>{
+                const lyrics = data.lyrics.replace(/(\r\n|r|\n)/g, "<br>");
+            getResult.innerHTML = `<pre class="text-white"> 
+            
+            <h2 class="text-center"><strong>${artist}</strong> -${songTitle}</h2>
+            <span>${lyrics}<span> 
+            </pre>`;
+            })
+            .catch(error => {
+               
+                alert("couldn't find lyrics..some api related problem here!!")
+            })
+        }
+      
+        //Get lyrics 
+        getResult.addEventListener('click', e => {
+           const lyricElement = e.target;
+
+           if(lyricElement.tagName === "BUTTON"){
+              const artist = lyricElement.getAttribute("data-artist");
+              const songTitle = lyricElement.getAttribute("data-songTitle");
+
+              getLyrics(artist, songTitle);
+           }
+           
         });
     </script>
 </body>
